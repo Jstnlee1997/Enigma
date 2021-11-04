@@ -155,7 +155,8 @@ void receiveConfigurationFiles(int argc, char** argv) {
 
     for (int i=1; i < argc; ++i) {
         char filename[7];
-        int val, index=0;
+        string word;
+        int index=0;
         int values[30];
         ifstream in;
         in.open(argv[i]);
@@ -174,14 +175,19 @@ void receiveConfigurationFiles(int argc, char** argv) {
         if (!strcmp("plugboa", filename)) {
             auto plugboard = Plugboard();
 
-            in >> val;
+            while (in >> word) {
+                // check if current word is non-numeric
+                if (!isNumber(word)) {
+                    cout << "Erorr: NON_NUMERIC_CHARACTER\n";
+                    exit(NON_NUMERIC_CHARACTER);
+                }
 
-            while (!in.fail()) {
-                out << val;
-                values[index] = val;
+                out << word;
+                values[index] = stoi(word);
+                word.clear();
                 index ++;
-                in >> val;
             }
+
             out << endl;
 
             // Check if there are odd number of numbers for plugboard
@@ -202,13 +208,17 @@ void receiveConfigurationFiles(int argc, char** argv) {
         if (!strcmp("reflect", filename)) {
             auto reflector = Reflector();
             
-            in >> val;
+            while (in >> word) {
+                // check if current word is non-numeric
+                if (!isNumber(word)) {
+                    cout << "Erorr: NON_NUMERIC_CHARACTER\n";
+                    exit(NON_NUMERIC_CHARACTER);
+                }
 
-            while (!in.fail()) {
-                out << val;
-                values[index] = val;
+                out << word;
+                values[index] = stoi(word);
+                word.clear();
                 index ++;
-                in >> val;
             }
             out << endl;
 
@@ -227,11 +237,9 @@ void receiveConfigurationFiles(int argc, char** argv) {
         }
 
         else {
-            in >> val;
-
-            while (!in.fail()) {
-                out << val;
-                in >> val;
+            while (in >> word) {
+                out << word;
+                word.clear();
             }
             out << endl;
         }
@@ -240,6 +248,13 @@ void receiveConfigurationFiles(int argc, char** argv) {
     out.close();
 }
 
+bool isNumber(const std::string &word)
+{
+    for (char const &c : word) {
+        if (!isdigit(c)) return false;
+    }
+    return true;
+}
 
 void checkPlugBoardNumbers() {
 

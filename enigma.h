@@ -27,6 +27,7 @@ public:
 /* Function Declarations */
 
 void receiveConfigurationFiles(int argc, char** argv);
+bool isNumber(const std::string &word);
 void encryptMessage(char* message);
 
 #define ENIGMA_H
