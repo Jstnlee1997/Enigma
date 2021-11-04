@@ -14,6 +14,15 @@ public:
     void printConnections();
 };
 
+class Reflector{
+    int connections[13][2] = {{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
+
+public:
+    void setConnection(int first, int second);
+    void getConnection(int &first);
+    void printConnections();
+};
+
 
 /* Function Declarations */
 
