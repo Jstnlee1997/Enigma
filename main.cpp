@@ -12,7 +12,7 @@ using namespace std;
 
 int main(int argc, char** argv)
 {
-    char message[MAX_LENTH];
+    // char message[MAX_LENTH];
 
     // Receive configuration files
     receiveConfigurationFiles(argc, argv);
@@ -20,10 +20,10 @@ int main(int argc, char** argv)
     // Prompt user to send a message to be encrypted/decrypted
     cout << "What message would you like to encrypt/decrypt?\n"
         << "Please make sure your message is in CAPITAL letters only.\n";
-    cin.getline(message, MAX_LENTH);
+    // cin.getline(message, MAX_LENTH);
 
-    // Encrypt/Decrypt message if possible, and output to standard output stream
-    encryptMessage(message);
+    // // Encrypt/Decrypt message if possible, and output to standard output stream
+    // encryptMessage(message);
 
     return NO_ERROR;
 }
