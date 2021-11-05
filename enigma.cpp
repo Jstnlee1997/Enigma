@@ -153,20 +153,20 @@ void Rotor::setConnection(int number, int index) {
 
     // Check through all previous mapping if there has been any repeat
     for (int i=0; i<index; i++) {
-        if (connections[i][1] == number) {
+        if (connections[i] == number) {
             cout << "current index is: " << i << " and number is: " << number << endl;
             cerr << "Error: INVALID_ROTOR_MAPPING\n";
             exit(INVALID_ROTOR_MAPPING);
         }
     }
 
-    connections[index][1] = number;
+    connections[index] = number;
 }
 
 // Void function to receive the corresponding mapping of input in the FORWARD direction
 void Rotor::getForwardConnection(int &number)
 {
-    number = connections[number][1];
+    number = connections[number];
 }
 
 // Void function to receive the corresponding mapping of input in the BACKWARD direction
@@ -174,7 +174,10 @@ void Rotor::getBackwardConnection(int &number)
 {
     // Loop through each connection to find corresponding backwards mapping
     for (int i=0; i<26; i++) {
-        if (connections[i][1] == number) number = connections[i][0];
+        if (connections[i] == number) {
+            number = i;
+            break;
+        }
     }
 }
 
@@ -184,8 +187,8 @@ void Rotor::printConnections()
     cout << "The Rotor connections are: \n";
     for (int i=0; i<26; i++) {
         // Output the ASCII equivalent of the letter, and show what number is it mapped to
-        cout << connections[i][0] << " (" << (char) (connections[i][0] + 65) << ") -> " 
-            << connections[i][1] << " (" << (char) (connections[i][1] + 65) << ")" << endl;
+        cout << i << " (" << (char) (i + 65) << ") -> " 
+            << connections[i] << " (" << (char) (connections[i] + 65) << ")" << endl;
     }
 }
 
@@ -448,42 +451,46 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
 
         // Pass number through all the rotors starting from RIGHT
         for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
-            // cout << "Connections for current rotor are: " << endl;
-            // rotors[r_index].printConnections();
+            cout << "Connections for current rotor are: " << endl;
+            rotors[r_index].printConnections();
 
-            // cout << "Current rotor index is " << r_index << endl;
+            cout << "Current rotor index is " << r_index << endl;
 
             // Change number accordingly depending on current rotor position
-            // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-            // cout << "Number is currently: " << number << endl;
+            cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+            cout << "Number is currently: " << number << endl;
             changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            // cout << "Number is now after changing according to rotor position: " << number << endl;
+            cout << "Number is now after changing according to rotor position: " << number << endl;
 
             // Change number according to the respective mapping
             rotors[r_index].getForwardConnection(number);
-            // cout << "After mapping, the number is now: " << number << endl;
+            cout << "After mapping, the number is now: " << number << endl;
         } 
 
         // Pass number through the reflector
         reflector.getConnection(number);
+        cout << "After reflection, the number is now: " << number << endl;
 
         // Pass number through all the rotors again but starting from the LEFT
         for (int r_index = 0; r_index < numberOfRotors; r_index++) {
-            // cout << "Connections for current rotor are: " << endl;
-            // rotors[r_index].printConnections();
+            cout << "Connections for current rotor are: " << endl;
+            rotors[r_index].printConnections();
 
-            // cout << "Current rotor index is " << r_index << endl;
+            cout << "Current rotor index is " << r_index << endl;
 
             // Change number accordingly depending on current rotor position
-            // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-            // cout << "Number is currently: " << number << endl;
+            cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+            cout << "Number is currently: " << number << endl;
             changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            // cout << "Number is now after changing according to rotor position: " << number << endl;
+            cout << "Number is now after changing according to rotor position: " << number << endl;
 
             // Change number according to the respective mapping
             rotors[r_index].getBackwardConnection(number);
-            // cout << "After mapping, the number is now: " << number << endl;
+            cout << "After mapping, the number is now: " << number << endl;
         }
+
+        // Pass number through the plugbloard
+        plugboard.getConnection(number);
 
         cout << "Initial letter: " << c << " has been encrypted/decrypted to letter: ";
 
