@@ -33,9 +33,9 @@ class Rotor{
 public:
     void setConnection(int number, int index);
     void getConnection(int &number);
+    void printConnections();
     void setNotch(int number);
     bool getNotch(int number);
-    void printConnections();
     void printNotches();
 };
 
