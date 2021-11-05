@@ -209,11 +209,22 @@ void Rotor::printNotches()
     }
 }
 
+// Void function to set the intiial position of the rotor
+void Rotor::setInitialPosition(int number){
+    // If number is not between 0 and 25
+    if (number < 0 || number > 25) {
+        cerr << "Error: INVALID_INDEX\n";
+        exit(INVALID_INDEX);
+    }
+    pos = number;
+}
+
 /* Function Definitions */
 /* Void function to receive configuration files and output the content into output.txt */
 void receiveConfigurationFiles(int argc, char** argv) 
 {
     int numberOfRotors = 0;
+    int numberOfStartingPositions=0;
     vector<Rotor> rotors;
     ofstream out;
     out.open("output.txt");
@@ -228,6 +239,7 @@ void receiveConfigurationFiles(int argc, char** argv)
         string word;
         int index=0;
         int values[30];
+
         ifstream in;
         in.open(argv[i]);
 
@@ -343,8 +355,19 @@ void receiveConfigurationFiles(int argc, char** argv)
         // If current file is for rotors (.pos)
         else if (regex_match(*(argv+i), regex("rotors/[A-Z]+.pos"))) {
             while (in >> word) {
+                // check if current word is non-numeric
+                if (!isNumber(word)) {
+                    cerr << "Erorr: NON_NUMERIC_CHARACTER\n";
+                    exit(NON_NUMERIC_CHARACTER);
+                }
+                numberOfStartingPositions ++;
+                rotors[numberOfStartingPositions-1].setInitialPosition(stoi(word));
                 out << word;
                 word.clear();
+            }
+            if (numberOfRotors < numberOfStartingPositions) {
+                cerr << "Error: NO_ROTOR_STARTING_POSITION\n";
+                exit(NO_ROTOR_STARTING_POSITION);
             }
             out << endl;
         }
