@@ -5,6 +5,7 @@
 #include <vector>
 #include <strings.h>
 #include <regex>
+#include <algorithm>
 #include "enigma.h"
 #include "errors.h"
 
@@ -162,11 +163,18 @@ void Rotor::setConnection(int number, int index) {
     connections[index][1] = number;
 }
 
-// Void function to receive the corresponding mapping of input
-void Rotor::getConnection(int &number)
+// Void function to receive the corresponding mapping of input in the FORWARD direction
+void Rotor::getForwardConnection(int &number)
 {
+    number = connections[number][1];
+}
+
+// Void function to receive the corresponding mapping of input in the BACKWARD direction
+void Rotor::getBackwardConnection(int &number)
+{
+    // Loop through each connection to find corresponding backwards mapping
     for (int i=0; i<26; i++) {
-        if (connections[i][0] == number) number = connections[i][1];
+        if (connections[i][1] == number) number = connections[i][0];
     }
 }
 
@@ -176,7 +184,7 @@ void Rotor::printConnections()
     cout << "The Rotor connections are: \n";
     for (int i=0; i<26; i++) {
         // Output the ASCII equivalent of the letter, and show what number is it mapped to
-        cout << (char) (connections[i][0] + 65) << " -> " 
+        cout << connections[i][0] << " (" << (char) (connections[i][0] + 65) << ") -> " 
             << connections[i][1] << " (" << (char) (connections[i][1] + 65) << ")" << endl;
     }
 }
@@ -194,9 +202,9 @@ void Rotor::setNotch(int number)
 }
 
 // Boolean function to check if current rotor position has a notch
-bool Rotor::getNotch(int number)
+bool Rotor::getNotch()
 {
-    if (notches[number] == 1) return true;
+    if (notches[pos] == 1) return true;
     return false;
 }
 
@@ -219,13 +227,27 @@ void Rotor::setInitialPosition(int number){
     pos = number;
 }
 
+// Void function to rotate position of the motor
+void Rotor::rotate()
+{
+    // cout << "Rotor has rotated from postion: " << pos << " to position: ";
+    pos++;
+    if (pos > 25) pos = 0;
+    // cout << pos << endl;
+}
+
+// Void function to output current position of the rotor
+int Rotor::getPosition()
+{
+    return pos;
+}
+
 /* Function Definitions */
 /* Void function to receive configuration files and output the content into output.txt */
-void receiveConfigurationFiles(int argc, char** argv) 
+void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
     int numberOfRotors = 0;
     int numberOfStartingPositions=0;
-    vector<Rotor> rotors;
     ofstream out;
     out.open("output.txt");
 
@@ -253,7 +275,6 @@ void receiveConfigurationFiles(int argc, char** argv)
 
         // If current file is for plugboards
         if (regex_match(*(argv+i), regex("plugboards/[A-Z]+.pb"))) {
-            auto plugboard = Plugboard();
 
             while (in >> word) {
                 // check if current word is non-numeric
@@ -281,12 +302,11 @@ void receiveConfigurationFiles(int argc, char** argv)
                 plugboard.setConnection(values[i], values[i+1]);
             }
 
-            plugboard.printConnections();
+            // plugboard.printConnections();
         }
 
         // If current file is for reflectors
         else if (regex_match(*(argv+i), regex("reflectors/[A-Z]+.rf"))) {
-            auto reflector = Reflector();
             
             while (in >> word) {
                 // check if current word is non-numeric
@@ -313,14 +333,13 @@ void receiveConfigurationFiles(int argc, char** argv)
                 reflector.setConnection(values[i], values[i+1]);
             }
 
-            reflector.printConnections();
+            // reflector.printConnections();
         }
 
         // If current file is for rotors (.rot)
         else if (regex_match(*(argv+i), regex("rotors/[A-Z]+.rot"))) {
             numberOfRotors ++;
             Rotor *r1 = new Rotor();
-            rotors.push_back(*r1);
 
             while (in >> word) {
                 // check if current word is non-numeric
@@ -348,8 +367,11 @@ void receiveConfigurationFiles(int argc, char** argv)
                 exit(INVALID_ROTOR_MAPPING);
             }
 
-            r1->printConnections();
-            r1->printNotches();
+            // r1->printConnections();
+            // r1->printNotches();
+
+            // Add current rotor to vector of rotors
+            rotors.push_back(*r1);
         }
 
         // If current file is for rotors (.pos)
@@ -365,15 +387,15 @@ void receiveConfigurationFiles(int argc, char** argv)
                 out << word;
                 word.clear();
             }
-            if (numberOfRotors < numberOfStartingPositions) {
+            if (numberOfStartingPositions < numberOfRotors) {
                 cerr << "Error: NO_ROTOR_STARTING_POSITION\n";
                 exit(NO_ROTOR_STARTING_POSITION);
             }
             out << endl;
         }
 
+        // Unknown file type
         else {
-            // Unknown file type
             cout << "Unknown file type: " << *(argv+i) << endl;
             cerr << "Error: ERROR_OPENING_CONFIGURATION_FILE!\n";
             exit(ERROR_OPENING_CONFIGURATION_FILE);
@@ -383,6 +405,7 @@ void receiveConfigurationFiles(int argc, char** argv)
     out.close();
 }
 
+/* Helper function to check if input read in from file is a number */
 bool isNumber(const std::string &word)
 {
     for (char const &c : word) {
@@ -391,15 +414,89 @@ bool isNumber(const std::string &word)
     return true;
 }
 
-void checkPlugBoardNumbers() {
-
-}
-
-void checkRotorNumbers() {
-    
-}
-
-void encryptMessage(char* message)
+void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
+    // Remove whitespaces from message
+    message.erase(remove_if(message.begin(), message.end(), ::isspace), message.end());
+
+    // Get the number of rotors
+    int numberOfRotors = rotors.size();
+
+    // Encrypt/Decrypt every message
+    for (char &c : message) {
+        // Only take in CAPITAL letters
+        if (c < 'A' || c > 'Z') {
+            cerr << "Error: INVALID_INPUT_CHARACTER\n";
+            exit(INVALID_INPUT_CHARACTER);
+        }
+
+        int number = (int) c - 65;
+
+        // Pass number through the plugbloard
+        plugboard.getConnection(number);
+
+        // Rotate all rotors starting from right most rotor
+        for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
+            // Rotate current rotor
+            rotors[r_index].rotate();
+
+            // Only rotate next rotor if current one hits a notch
+            if (!rotors[r_index].getNotch()) {
+                break;
+            }
+        }
+
+        // Pass number through all the rotors starting from RIGHT
+        for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
+            // cout << "Connections for current rotor are: " << endl;
+            // rotors[r_index].printConnections();
+
+            // cout << "Current rotor index is " << r_index << endl;
+
+            // Change number accordingly depending on current rotor position
+            // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+            // cout << "Number is currently: " << number << endl;
+            changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            // cout << "Number is now after changing according to rotor position: " << number << endl;
+
+            // Change number according to the respective mapping
+            rotors[r_index].getForwardConnection(number);
+            // cout << "After mapping, the number is now: " << number << endl;
+        } 
+
+        // Pass number through the reflector
+        reflector.getConnection(number);
+
+        // Pass number through all the rotors again but starting from the LEFT
+        for (int r_index = 0; r_index < numberOfRotors; r_index++) {
+            // cout << "Connections for current rotor are: " << endl;
+            // rotors[r_index].printConnections();
+
+            // cout << "Current rotor index is " << r_index << endl;
+
+            // Change number accordingly depending on current rotor position
+            // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+            // cout << "Number is currently: " << number << endl;
+            changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            // cout << "Number is now after changing according to rotor position: " << number << endl;
+
+            // Change number according to the respective mapping
+            rotors[r_index].getBackwardConnection(number);
+            // cout << "After mapping, the number is now: " << number << endl;
+        }
+
+        cout << "Initial letter: " << c << " has been encrypted/decrypted to letter: ";
+
+        c = (char) (number + 65);
+
+        cout << c << endl;
+    }
+
     cout << "Your encrypted/decrypted message is: " << message << endl;
+}
+
+void changeNumberAccordingToRotorPosition(int &number, const int pos)
+{
+    number += pos;
+    if (number > 25) number -= 26;
 }
