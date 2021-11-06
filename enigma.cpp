@@ -154,7 +154,6 @@ void Rotor::setConnection(int number, int index) {
     // Check through all previous mapping if there has been any repeat
     for (int i=0; i<index; i++) {
         if (connections[i] == number) {
-            cout << "current index is: " << i << " and number is: " << number << endl;
             cerr << "Error: INVALID_ROTOR_MAPPING\n";
             exit(INVALID_ROTOR_MAPPING);
         }
@@ -277,7 +276,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
 
 
         // If current file is for plugboards
-        if (regex_match(*(argv+i), regex("plugboards/[A-Z]+.pb"))) {
+        if (regex_match(*(argv+i), regex("plugboards/[a-zA-Z0-9_]+.pb"))) {
 
             while (in >> word) {
                 // check if current word is non-numeric
@@ -309,7 +308,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for reflectors
-        else if (regex_match(*(argv+i), regex("reflectors/[A-Z]+.rf"))) {
+        else if (regex_match(*(argv+i), regex("reflectors/[a-zA-Z0-9_]+.rf"))) {
             
             while (in >> word) {
                 // check if current word is non-numeric
@@ -340,7 +339,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for rotors (.rot)
-        else if (regex_match(*(argv+i), regex("rotors/[A-Z]+.rot"))) {
+        else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.rot"))) {
             numberOfRotors ++;
             Rotor *r1 = new Rotor();
 
@@ -378,7 +377,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for rotors (.pos)
-        else if (regex_match(*(argv+i), regex("rotors/[A-Z]+.pos"))) {
+        else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.pos"))) {
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
