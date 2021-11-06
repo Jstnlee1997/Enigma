@@ -283,7 +283,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
 
 
         // If current file is for plugboards
-        if (regex_match(*(argv+i), regex("plugboards/[a-zA-Z0-9_]+.pb"))) {
+        if (regex_match(*(argv+i), regex("[a-zA-Z0-9_/]+.pb"))) {
 
             while (in >> word) {
                 // check if current word is non-numeric
@@ -315,7 +315,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for reflectors
-        else if (regex_match(*(argv+i), regex("reflectors/[a-zA-Z0-9_]+.rf"))) {
+        else if (regex_match(*(argv+i), regex("[a-zA-Z0-9_/]+.rf"))) {
             
             while (in >> word) {
                 // check if current word is non-numeric
@@ -346,7 +346,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for rotors (.rot)
-        else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.rot"))) {
+        else if (regex_match(*(argv+i), regex("[a-zA-Z0-9_/]+.rot"))) {
             numberOfRotors ++;
             Rotor *r1 = new Rotor();
 
@@ -384,7 +384,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         }
 
         // If current file is for rotors (.pos)
-        else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.pos"))) {
+        else if (regex_match(*(argv+i), regex("[a-zA-Z0-9_/]+.pos"))) {
             if (numberOfRotors == 0) break;
             while (in >> word) {
                 // check if current word is non-numeric
