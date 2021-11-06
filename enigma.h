@@ -46,7 +46,8 @@ public:
 void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 bool isNumber(const std::string &word);
 void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
-void changeNumberAccordingToRotorPosition(int &number, const int pos);
+void changeInputAccordingToRotorPosition(int &number, const int pos);
+void changeOutputAccordingToRotorPosition(int &number, const int pos);
 
 #define ENIGMA_H
 #endif

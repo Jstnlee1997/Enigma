@@ -455,15 +455,20 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
 
             cout << "Current rotor index is " << r_index << endl;
 
-            // Change number accordingly depending on current rotor position
+            // Change input number accordingly depending on current rotor position
             cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
             cout << "Number is currently: " << number << endl;
-            changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            cout << "Number is now after changing according to rotor position: " << number << endl;
+            changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            cout << "Number is now after changing intput according to rotor position: " << number << endl;
 
             // Change number according to the respective mapping
             rotors[r_index].getForwardConnection(number);
             cout << "After mapping, the number is now: " << number << endl;
+
+            // Change output number accordingly depending on current rotor position
+            changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            cout << "Number is now after changing output according to rotor position: " << number << endl;
+
         } 
 
         // Pass number through the reflector
@@ -480,12 +485,16 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
             // Change number accordingly depending on current rotor position
             cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
             cout << "Number is currently: " << number << endl;
-            changeNumberAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
             cout << "Number is now after changing according to rotor position: " << number << endl;
 
             // Change number according to the respective mapping
             rotors[r_index].getBackwardConnection(number);
             cout << "After mapping, the number is now: " << number << endl;
+
+            // Change output number accordingly depending on current rotor position
+            changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+            cout << "Number is now after changing output according to rotor position: " << number << endl;
         }
 
         // Pass number through the plugbloard
@@ -501,8 +510,14 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
     cout << "Your encrypted/decrypted message is: " << message << endl;
 }
 
-void changeNumberAccordingToRotorPosition(int &number, const int pos)
+void changeInputAccordingToRotorPosition(int &number, const int pos)
 {
     number += pos;
     if (number > 25) number -= 26;
+}
+
+void changeOutputAccordingToRotorPosition(int &number, const int pos)
+{
+    number -= pos;
+    if (number < 0) number += 26;
 }
