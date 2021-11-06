@@ -2,9 +2,11 @@
 
 #ifndef ENIGMA_H
 
-/* Classes Definitions */
+///////////////////////////
+///* CLASS DEFINITIONS *///
+///////////////////////////
 
-// Plugboard Class
+/* Plugboard Class */
 class Plugboard{
     int connections[13][2] = {{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
 
@@ -14,6 +16,7 @@ public:
     void printConnections();
 };
 
+/* Reflector Class */
 class Reflector{
     int connections[13][2] = {{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
 
@@ -23,6 +26,7 @@ public:
     void printConnections();
 };
 
+/* Rotor Class */
 class Rotor{
     int pos=0;
     int connections[26] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
@@ -41,11 +45,16 @@ public:
     int getPosition();
 };
 
-/* Function Declarations */
+///////////////////////////////
+///* FUNCTION DECLARATIONS *///
+///////////////////////////////
 
 void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 bool isNumber(const std::string &word);
 void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
+void rotateAllRotors(const int numberOfRotors, std::vector<Rotor> &rotors);
+void passThroughRotorsFromRight(int &number, const int numberOfRotors, std::vector<Rotor> &rotors);
+void passThroughRotorsFromLeft(int &number, const int numberOfRotors, std::vector<Rotor> &rotors);
 void changeInputAccordingToRotorPosition(int &number, const int pos);
 void changeOutputAccordingToRotorPosition(int &number, const int pos);
 

@@ -1,7 +1,6 @@
 #include <iostream>
 #include <fstream>
 #include <cstdio>
-#include <cstring>
 #include <vector>
 #include <strings.h>
 #include <regex>
@@ -11,9 +10,12 @@
 
 using namespace std;
 
-/* Class Functions */
+/////////////////////////
+///* CLASS FUNCTIONS *///
+/////////////////////////
 
 /* Plugboard Class Functions */
+
 // Void function to create a connection between two characters
 void Plugboard::setConnection(int first, int second)
 {
@@ -80,6 +82,7 @@ void Plugboard::printConnections()
 }
 
 /* Reflector Class Functions */
+
 // Void function to create a connection between two characters
 void Reflector::setConnection(int first, int second)
 {
@@ -143,6 +146,7 @@ void Reflector::printConnections()
 }
 
 /* Rotor Class Functions */
+
 // Void function to map current number to its corresponding letter
 void Rotor::setConnection(int number, int index) {
     // If number is not between 0 and 25
@@ -244,7 +248,10 @@ int Rotor::getPosition()
     return pos;
 }
 
-/* Function Definitions */
+//////////////////////////////
+///* FUNCTION DEFINITIONS *///
+//////////////////////////////
+
 /* Void function to receive configuration files and output the content into output.txt */
 void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
@@ -411,7 +418,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
     out.close();
 }
 
-/* Helper function to check if input read in from file is a number */
+/* Helper Boolean function to check if input read in from file is a number */
 bool isNumber(const std::string &word)
 {
     for (char const &c : word) {
@@ -420,6 +427,14 @@ bool isNumber(const std::string &word)
     return true;
 }
 
+/* Void function to encrypt each character of the message
+Each character goes through the following components where they are changed accordingly:
+    1. Plugboard
+    2. Through every rotor from Right -> Left
+    3. Reflector
+    4. Through every rotor from Left -> Right
+    5. Plugboard
+*/
 void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
     // Remove whitespaces from message
@@ -428,7 +443,7 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
     // Get the number of rotors
     int numberOfRotors = rotors.size();
 
-    // Encrypt/Decrypt every message
+    // Encrypt/Decrypt every letter
     for (char &c : message) {
         // Only take in CAPITAL letters
         if (c < 'A' || c > 'Z') {
@@ -442,64 +457,17 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
         plugboard.getConnection(number);
 
         // Rotate all rotors starting from right most rotor
-        for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
-            // Rotate current rotor
-            rotors[r_index].rotate();
-
-            // Only rotate next rotor if current one hits a notch
-            if (!rotors[r_index].getNotch()) {
-                break;
-            }
-        }
+        rotateAllRotors(numberOfRotors, rotors);
 
         // Pass number through all the rotors starting from RIGHT
-        for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
-            cout << "Connections for current rotor are: " << endl;
-            rotors[r_index].printConnections();
-
-            cout << "Current rotor index is " << r_index << endl;
-
-            // Change input number accordingly depending on current rotor position
-            cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-            cout << "Number is currently: " << number << endl;
-            changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            cout << "Number is now after changing intput according to rotor position: " << number << endl;
-
-            // Change number according to the respective mapping
-            rotors[r_index].getForwardConnection(number);
-            cout << "After mapping, the number is now: " << number << endl;
-
-            // Change output number accordingly depending on current rotor position
-            changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            cout << "Number is now after changing output according to rotor position: " << number << endl;
-
-        } 
+        passThroughRotorsFromRight(number, numberOfRotors, rotors);
 
         // Pass number through the reflector
         reflector.getConnection(number);
         cout << "After reflection, the number is now: " << number << endl;
 
         // Pass number through all the rotors again but starting from the LEFT
-        for (int r_index = 0; r_index < numberOfRotors; r_index++) {
-            cout << "Connections for current rotor are: " << endl;
-            rotors[r_index].printConnections();
-
-            cout << "Current rotor index is " << r_index << endl;
-
-            // Change number accordingly depending on current rotor position
-            cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-            cout << "Number is currently: " << number << endl;
-            changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            cout << "Number is now after changing according to rotor position: " << number << endl;
-
-            // Change number according to the respective mapping
-            rotors[r_index].getBackwardConnection(number);
-            cout << "After mapping, the number is now: " << number << endl;
-
-            // Change output number accordingly depending on current rotor position
-            changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-            cout << "Number is now after changing output according to rotor position: " << number << endl;
-        }
+        passThroughRotorsFromLeft(number, numberOfRotors, rotors);
 
         // Pass number through the plugbloard
         plugboard.getConnection(number);
@@ -514,12 +482,79 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
     cout << "Your encrypted/decrypted message is: " << message << endl;
 }
 
+/* Void function to rotate all rotors */
+void rotateAllRotors(const int numberOfRotors, std::vector<Rotor> &rotors)
+{
+    for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
+        // Rotate current rotor
+        rotors[r_index].rotate();
+
+        // Only rotate next rotor if current one hits a notch
+        if (!rotors[r_index].getNotch()) {
+            break;
+        }
+    }
+}
+
+/* Void function to pass number through each rotor from RIGHT -> LEFT */
+void passThroughRotorsFromRight(int &number, const int numberOfRotors, std::vector<Rotor> &rotors)
+{
+    for (int r_index = numberOfRotors-1; r_index>=0; r_index--) {
+        // cout << "Connections for current rotor are: " << endl;
+        // rotors[r_index].printConnections();
+
+        cout << "Current rotor index is " << r_index << endl;
+
+        // Change input number accordingly depending on current rotor position
+        cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+        cout << "Number is currently: " << number << endl;
+        changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+        cout << "Number is now after changing intput according to rotor position: " << number << endl;
+
+        // Change number according to the respective mapping
+        rotors[r_index].getForwardConnection(number);
+        cout << "After mapping, the number is now: " << number << endl;
+
+        // Change output number accordingly depending on current rotor position
+        changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+        cout << "Number is now after changing output according to rotor position: " << number << endl;
+
+    } 
+}
+
+/* Void function to pass number through each rotor from LEFT -> RIGHT */
+void passThroughRotorsFromLeft(int &number, const int numberOfRotors, std::vector<Rotor> &rotors)
+{
+    for (int r_index = 0; r_index < numberOfRotors; r_index++) {
+        // cout << "Connections for current rotor are: " << endl;
+        // rotors[r_index].printConnections();
+
+        // cout << "Current rotor index is " << r_index << endl;
+
+        // Change number accordingly depending on current rotor position
+        cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+        cout << "Number is currently: " << number << endl;
+        changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+        cout << "Number is now after changing according to rotor position: " << number << endl;
+
+        // Change number according to the respective mapping
+        rotors[r_index].getBackwardConnection(number);
+        cout << "After mapping, the number is now: " << number << endl;
+
+        // Change output number accordingly depending on current rotor position
+        changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
+        cout << "Number is now after changing output according to rotor position: " << number << endl;
+    }
+}
+
+/* Void function to change the input number into the current rotor depending on the relative position of the rotor */
 void changeInputAccordingToRotorPosition(int &number, const int pos)
 {
     number += pos;
     if (number > 25) number -= 26;
 }
 
+/* Void function to change the output number out of the current rotor depending on the relative position of the rotor */
 void changeOutputAccordingToRotorPosition(int &number, const int pos)
 {
     number -= pos;

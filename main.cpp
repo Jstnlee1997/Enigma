@@ -1,14 +1,10 @@
 #include <iostream>
 #include <fstream>
-#include <cstring>
 #include <cstdio>
 #include <strings.h>
 #include <vector>
 #include "errors.h"
 #include "enigma.h"
-
-const int MAX_LENTH = 255;
-
 
 using namespace std;
 
