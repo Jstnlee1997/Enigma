@@ -378,6 +378,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
 
         // If current file is for rotors (.pos)
         else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.pos"))) {
+            if (numberOfRotors == 0) continue;
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
