@@ -464,7 +464,7 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
 
         // Pass number through the reflector
         reflector.getConnection(number);
-        cout << "After reflection, the number is now: " << number << endl;
+        // cout << "After reflection, the number is now: " << number << endl;
 
         // Pass number through all the rotors again but starting from the LEFT
         passThroughRotorsFromLeft(number, numberOfRotors, rotors);
@@ -472,14 +472,15 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
         // Pass number through the plugbloard
         plugboard.getConnection(number);
 
-        cout << "Initial letter: " << c << " has been encrypted/decrypted to letter: ";
+        // cout << "Initial letter: " << c << " has been encrypted/decrypted to letter: ";
 
         c = (char) (number + 65);
 
-        cout << c << endl;
+        // cout << c << endl;
     }
 
-    cout << "Your encrypted/decrypted message is: " << message << endl;
+    // cout << "Your encrypted/decrypted message is: " << message << endl;
+    cout << message << endl;
 }
 
 /* Void function to rotate all rotors */
@@ -503,21 +504,21 @@ void passThroughRotorsFromRight(int &number, const int numberOfRotors, std::vect
         // cout << "Connections for current rotor are: " << endl;
         // rotors[r_index].printConnections();
 
-        cout << "Current rotor index is " << r_index << endl;
+        // cout << "Current rotor index is " << r_index << endl;
 
         // Change input number accordingly depending on current rotor position
-        cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-        cout << "Number is currently: " << number << endl;
+        // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+        // cout << "Number is currently: " << number << endl;
         changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-        cout << "Number is now after changing intput according to rotor position: " << number << endl;
+        // cout << "Number is now after changing intput according to rotor position: " << number << endl;
 
         // Change number according to the respective mapping
         rotors[r_index].getForwardConnection(number);
-        cout << "After mapping, the number is now: " << number << endl;
+        // cout << "After mapping, the number is now: " << number << endl;
 
         // Change output number accordingly depending on current rotor position
         changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-        cout << "Number is now after changing output according to rotor position: " << number << endl;
+        // cout << "Number is now after changing output according to rotor position: " << number << endl;
 
     } 
 }
@@ -532,18 +533,18 @@ void passThroughRotorsFromLeft(int &number, const int numberOfRotors, std::vecto
         // cout << "Current rotor index is " << r_index << endl;
 
         // Change number accordingly depending on current rotor position
-        cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
-        cout << "Number is currently: " << number << endl;
+        // cout << "Current position of rotor is at: " << rotors[r_index].getPosition() << endl;
+        // cout << "Number is currently: " << number << endl;
         changeInputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-        cout << "Number is now after changing according to rotor position: " << number << endl;
+        // cout << "Number is now after changing according to rotor position: " << number << endl;
 
         // Change number according to the respective mapping
         rotors[r_index].getBackwardConnection(number);
-        cout << "After mapping, the number is now: " << number << endl;
+        // cout << "After mapping, the number is now: " << number << endl;
 
         // Change output number accordingly depending on current rotor position
         changeOutputAccordingToRotorPosition(number, rotors[r_index].getPosition());
-        cout << "Number is now after changing output according to rotor position: " << number << endl;
+        // cout << "Number is now after changing output according to rotor position: " << number << endl;
     }
 }
 
