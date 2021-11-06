@@ -19,8 +19,8 @@ int main(int argc, char** argv)
     receiveConfigurationFiles(argc, argv, plugboard, reflector, rotors);
 
     // Prompt user to send a message to be encrypted/decrypted
-    cout << "What message would you like to encrypt/decrypt?\n"
-        << "Please make sure your message is in CAPITAL letters only.\n";
+    // cout << "What message would you like to encrypt/decrypt?\n"
+    //     << "Please make sure your message is in CAPITAL letters only.\n";
     getline(cin, message);
 
     // Encrypt/Decrypt message if possible, and output to standard output stream
