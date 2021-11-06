@@ -378,7 +378,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
 
         // If current file is for rotors (.pos)
         else if (regex_match(*(argv+i), regex("rotors/[a-zA-Z0-9_]+.pos"))) {
-            if (numberOfRotors == 0) continue;
+            if (numberOfRotors == 0) break;
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
@@ -395,6 +395,9 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
                 exit(NO_ROTOR_STARTING_POSITION);
             }
             out << endl;
+
+            // This has to be the final file
+            break;
         }
 
         // Unknown file type
