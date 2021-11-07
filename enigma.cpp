@@ -487,7 +487,7 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
     for (char &c : message) {
         // Only take in CAPITAL letters
         if (c < 'A' || c > 'Z') {
-            cerr << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
+            cerr << endl << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
             exit(INVALID_INPUT_CHARACTER);
         }
 
@@ -516,11 +516,10 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
 
         c = (char) (number + 65);
 
-        // cout << c << endl;
+        cout << c;
     }
 
-    // cout << "Your encrypted/decrypted message is: " << message << endl;
-    cout << message << endl;
+    cout << endl;
 }
 
 /* Void function to rotate all rotors */
