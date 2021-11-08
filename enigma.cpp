@@ -433,7 +433,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
             // Check that every input is provided a mapping
             if (index != 26) {
-                cerr << "Not all inputs mapped in rotor file " << *(argv+i);
+                cerr << "Not all inputs mapped in rotor file: " << *(argv+i);
                 return(INVALID_ROTOR_MAPPING);
             }
 
@@ -461,7 +461,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
                 word.clear();
             }
             if (numberOfStartingPositions < numberOfRotors) {
-                cerr << "No starting position for rotor " << numberOfStartingPositions << " in rotor position file " << *(argv+i);
+                cerr << "No starting position for rotor " << numberOfStartingPositions << " in rotor position file: " << *(argv+i);
                 return(NO_ROTOR_STARTING_POSITION);
             }
             out << endl;
