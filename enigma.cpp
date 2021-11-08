@@ -543,7 +543,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
         cout << c;
     }
 
-    cout << endl;
+    // cout << endl;
 
     return NO_ERROR;
 }
