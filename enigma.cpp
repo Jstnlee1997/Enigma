@@ -21,19 +21,19 @@ int Plugboard::setConnection(const int first, const int second)
 {
     // If first number is not between 0 and 25
     if (first < 0 || first > 25) {
-        cerr << "Invalid index given in plugboard file for mapping of number: " << first;
+        cerr << "Invalid index given in plugboard file for mapping of number: " << first << endl;
         return(INVALID_INDEX);
     }
 
     // If second number is not between 0 and 25
     if (second < 0 || second > 25) {
-        cerr << "Invalid index given in plugboard file for mapping of number: " << second;
+        cerr << "Invalid index given in plugboard file for mapping of number: " << second << endl;
         return(INVALID_INDEX);
     }
 
     // If file attempts to connect a contact with itself
     if (first == second) {
-        cerr << "Invalid index given for mapping of two identical numbers: " << first;
+        cerr << "Invalid index given for mapping of two identical numbers: " << first << endl;
         return(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
     }
 
@@ -101,19 +101,19 @@ int Reflector::setConnection(const int first, const int second)
 {
     // If first number is not between 0 and 25
     if (first < 0 || first > 25) {
-        cerr << "Invalid index given in reflector file for mapping of number: " << first;
+        cerr << "Invalid index given in reflector file for mapping of number: " << first << endl;
         return(INVALID_INDEX);
     }
 
     // If second number is not between 0 and 25
     if (second < 0 || second > 25) {
-        cerr << "Invalid index given in reflector file for mapping of number: " << second;
+        cerr << "Invalid index given in reflector file for mapping of number: " << second << endl;
         return(INVALID_INDEX);
     }
 
     // If file attempts to connect a contact with itself
     if (first == second) {
-        cerr << "Invalid index given for mapping of two identical numbers: " << first;
+        cerr << "Invalid index given for mapping of two identical numbers: " << first << endl;
         return(INVALID_REFLECTOR_MAPPING);
     }
 
@@ -125,12 +125,12 @@ int Reflector::setConnection(const int first, const int second)
 
         // Check if first number already has existing connections
         if (connections[i][0] == first || connections[i][1] == first) {
-            cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << first;
+            cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << first << endl;
             return(INVALID_REFLECTOR_MAPPING);
         }
         // Check if second number already has existing connections
         if (connections[i][0] == second || connections[i][1] == second) {
-            cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << second;
+            cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << second << endl;
             return(INVALID_REFLECTOR_MAPPING);
         }
     }
@@ -177,14 +177,14 @@ void Reflector::printConnections()
 int Rotor::setConnection(const int number, const int index) {
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
-        cerr << "Invalid index given for mapping of input " << index << " to output " << number;
+        cerr << "Invalid index given for mapping of input " << index << " to output " << number << endl;
         return(INVALID_INDEX);
     }
 
     // Check through all previous mapping if there has been any repeat
     for (int i=0; i<index; i++) {
         if (connections[i] == number) {
-            cerr << "Invalid mapping of input " << index << " to output " << number << " (output " << number << " is already mapped to from input " << i << ")";
+            cerr << "Invalid mapping of input " << index << " to output " << number << " (output " << number << " is already mapped to from input " << i << ") in";
             return(INVALID_ROTOR_MAPPING);
         }
     }
@@ -229,7 +229,7 @@ int Rotor::setNotch(const int number)
 {
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
-        cerr << "Invalid index given for notch: " << number;
+        cerr << "Invalid index given for notch: " << number << endl;
         return(INVALID_INDEX);
     }
 
@@ -259,7 +259,7 @@ void Rotor::printNotches()
 int Rotor::setInitialPosition(const int number){
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
-        cerr << "Invalid index given for initial rotor position: " << number;
+        cerr << "Invalid index given for initial rotor position: " << number << endl;
         return(INVALID_INDEX);
     }
 
@@ -297,7 +297,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
     // There needs to be at least 4 parameters (including executable file) when there are no rotors.
     if (argc <= 3) {
-        cerr << "Incorrect number of command line arguments";
+        cerr << "Incorrect number of command line arguments" << endl;
         return(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
@@ -312,7 +312,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
         // Error opening configuration file
         if (!in)
         {
-            cerr << "There is an error opening configuration file " << *(argv+i);
+            cerr << "There is an error opening configuration file " << *(argv+i) << endl;
             return(ERROR_OPENING_CONFIGURATION_FILE);
         }
 
@@ -323,7 +323,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
-                    cerr << "Non-numeric character in plugboard file " << *(argv+i);
+                    cerr << "Non-numeric character in plugboard file " << *(argv+i) << endl;
                     return(NON_NUMERIC_CHARACTER);
                 }
 
@@ -337,13 +337,13 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
             // Case: Odd number of parameters provided for plugboard
             if (index % 2 != 0) {
-                cerr << "Incorrect (odd) number of parameters in plugboard file " << *(argv+i);
+                cerr << "Incorrect (odd) number of parameters in plugboard file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
             }
 
             // Case: Too many parameters provided for plugboard
             if (index > 26) {
-                cerr << "Incorrect number of parameters in plugboard file " << *(argv+i);
+                cerr << "Incorrect number of parameters in plugboard file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
             }
 
@@ -363,7 +363,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
-                    cerr << "Non-numeric character in reflector file " << *(argv+i);
+                    cerr << "Non-numeric character in reflector file " << *(argv+i) << endl;
                     return(NON_NUMERIC_CHARACTER);
                 }
 
@@ -376,19 +376,19 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
             // Case: Odd number of parameters provided for reflector
             if (index % 2 != 0) {
-                cerr << " Incorrect (odd) number of parameters in reflector file " << *(argv+i);
+                cerr << " Incorrect (odd) number of parameters in reflector file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Case: Even BUT Fewer than 26 parameters provided 
             if (index < 26) {
-                cerr << " Insufficient number of mappings in reflector file " << *(argv+i);
+                cerr << " Insufficient number of mappings in reflector file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Check that there are exactly 13 pairs of numbers
             if (index != 26) {
-                cerr << "Incorrect number of parameters in reflector file " << *(argv+i);
+                cerr << "Incorrect number of parameters in reflector file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
@@ -410,7 +410,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
-                    cerr << "Non-numeric character for mapping in rotor file " << *(argv+i);
+                    cerr << "Non-numeric character for mapping in rotor file " << *(argv+i) << endl;
                     return(NON_NUMERIC_CHARACTER);
                 }
                 if (index < 26) {
@@ -450,7 +450,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
             while (in >> word) {
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
-                    cerr << "Non-numeric character in rotor positions file " << *(argv+i);
+                    cerr << "Non-numeric character in rotor positions file " << *(argv+i) << endl;
                     return(NON_NUMERIC_CHARACTER);
                 }
                 numberOfStartingPositions ++;
@@ -472,7 +472,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
         // Unknown file type
         else {
-            cerr << "Unacceptable or unknown file type for configuration file " << *(argv+i);
+            cerr << "Unacceptable or unknown file type for configuration file " << *(argv+i) << endl;
             return(ERROR_OPENING_CONFIGURATION_FILE);
         }
         in.close();
@@ -511,7 +511,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
     for (char &c : message) {
         // Only take in CAPITAL letters
         if (c < 'A' || c > 'Z') {
-            cerr << c << " is not a valid input character (input characters must be upper case letters A-Z)!";
+            cerr << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
             return(INVALID_INPUT_CHARACTER);
         }
 
