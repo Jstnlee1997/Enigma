@@ -297,9 +297,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
     // There needs to be at least 4 parameters (including executable file) when there are no rotors.
     if (argc <= 3) {
-        cerr << "usage: enigma";
-        for (int file=1; file<argc; file++)  cerr << " " << *(argv+file);
-        cerr << endl;
+        cerr << "usage: enigma plugboard-file reflector-file (<rotor-file>)* rotor-positions" << endl;
         return(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
@@ -419,7 +417,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
                     // setConnection will output non-zero if any errors are present
                     result = r1->setConnection(stoi(word), index);
                     if (result == INVALID_ROTOR_MAPPING) {
-                        cerr << " in rotor file " << *(argv+i) << endl;
+                        cerr << " in rotor file: " << *(argv+i) << endl;
                         return result;
                     }
                     if (result != 0) return result;
