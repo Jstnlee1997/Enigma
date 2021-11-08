@@ -184,7 +184,7 @@ int Rotor::setConnection(const int number, const int index) {
     // Check through all previous mapping if there has been any repeat
     for (int i=0; i<index; i++) {
         if (connections[i] == number) {
-            cerr << "Invalid mapping of input " << index << " to output " << number << " (output " << number << " is already mapped to from input " << i << ") in";
+            cerr << "Invalid mapping of input " << index << " to output " << number << " (output " << number << " is already mapped to from input " << i << ")";
             return(INVALID_ROTOR_MAPPING);
         }
     }
@@ -297,7 +297,9 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
     // There needs to be at least 4 parameters (including executable file) when there are no rotors.
     if (argc <= 3) {
-        cerr << "Incorrect number of command line arguments" << endl;
+        cerr << "usage: enigma";
+        for (int file=1; file<argc; file++)  cerr << " " << *(argv+file);
+        cerr << endl;
         return(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
@@ -337,7 +339,7 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
             // Case: Odd number of parameters provided for plugboard
             if (index % 2 != 0) {
-                cerr << "Incorrect (odd) number of parameters in plugboard file " << *(argv+i) << endl;
+                cerr << "Incorrect number of parameters in plugboard file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
             }
 
@@ -376,13 +378,13 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
 
             // Case: Odd number of parameters provided for reflector
             if (index % 2 != 0) {
-                cerr << " Incorrect (odd) number of parameters in reflector file " << *(argv+i) << endl;
+                cerr << "Incorrect (odd) number of parameters in reflector file " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Case: Even BUT Fewer than 26 parameters provided 
             if (index < 26) {
-                cerr << " Insufficient number of mappings in reflector file " << *(argv+i) << endl;
+                cerr << "Insufficient number of mappings in reflector file: " << *(argv+i) << endl;
                 return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
@@ -416,6 +418,10 @@ int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refle
                 if (index < 26) {
                     // setConnection will output non-zero if any errors are present
                     result = r1->setConnection(stoi(word), index);
+                    if (result == INVALID_ROTOR_MAPPING) {
+                        cerr << " in rotor file " << *(argv+i) << endl;
+                        return result;
+                    }
                     if (result != 0) return result;
                     out << word;
                     word.clear();
