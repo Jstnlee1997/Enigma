@@ -11,7 +11,7 @@ class Plugboard{
     int connections[13][2] = {{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
 
 public:
-    void setConnection(int first, int second);
+    int setConnection(const int first, const int second);
     void getConnection(int &number);
     void printConnections();
 };
@@ -21,7 +21,7 @@ class Reflector{
     int connections[13][2] = {{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1},{-1,-1}};
 
 public:
-    void setConnection(int first, int second);
+    int setConnection(const int first, const int second);
     void getConnection(int &number);
     void printConnections();
 };
@@ -33,14 +33,14 @@ class Rotor{
     int notches[26] = {-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1,-1};
 
 public:
-    void setConnection(int number, int index);
+    int setConnection(const int number, const int index);
     void getForwardConnection(int &number);
     void getBackwardConnection(int &number);
     void printConnections();
-    void setNotch(int number);
+    int setNotch(const int number);
     bool getNotch();
     void printNotches();
-    void setInitialPosition(int number);
+    int setInitialPosition(const int number);
     void rotate();
     int getPosition();
 };
@@ -49,9 +49,9 @@ public:
 ///* FUNCTION DECLARATIONS *///
 ///////////////////////////////
 
-void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
+int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 bool isNumber(const std::string &word);
-void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
+int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 void rotateAllRotors(const int numberOfRotors, std::vector<Rotor> &rotors);
 void passThroughRotorsFromRight(int &number, const int numberOfRotors, std::vector<Rotor> &rotors);
 void passThroughRotorsFromLeft(int &number, const int numberOfRotors, std::vector<Rotor> &rotors);

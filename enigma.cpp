@@ -17,24 +17,24 @@ using namespace std;
 /* Plugboard Class Functions */
 
 // Void function to create a connection between two characters
-void Plugboard::setConnection(int first, int second)
+int Plugboard::setConnection(const int first, const int second)
 {
     // If first number is not between 0 and 25
     if (first < 0 || first > 25) {
         cerr << "Invalid index given in plugboard file for mapping of number: " << first << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
 
     // If second number is not between 0 and 25
     if (second < 0 || second > 25) {
         cerr << "Invalid index given in plugboard file for mapping of number: " << second << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
 
     // If file attempts to connect a contact with itself
     if (first == second) {
         cerr << "Invalid index given for mapping of two identical numbers: " << first << endl;
-        exit(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
+        return(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
     }
 
 
@@ -46,18 +46,20 @@ void Plugboard::setConnection(int first, int second)
         // Check if first number already has existing connections
         if (connections[i][0] == first || connections[i][1] == first) {
             cerr << "Invalid plugboard mapping as there are repeats of mapping of number: " << first << endl;
-            exit(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
+            return(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
         }
         // Check if second number already has existing connections
         if (connections[i][0] == second || connections[i][1] == second) {
             cerr << "Invalid plugboard mapping as there are repeats of mapping of number: " << second << endl;
-            exit(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
+            return(IMPOSSIBLE_PLUGBOARD_CONFIGURATION);
         }
     }
 
     // If it reaches here, can create new connection
     connections[i][0] = first;
     connections[i][1] = second;
+
+    return NO_ERROR;
 }
 
 // Void function to receive the corresponding connection if the connection exists
@@ -95,24 +97,24 @@ void Plugboard::printConnections()
 /* Reflector Class Functions */
 
 // Void function to create a connection between two characters
-void Reflector::setConnection(int first, int second)
+int Reflector::setConnection(const int first, const int second)
 {
     // If first number is not between 0 and 25
     if (first < 0 || first > 25) {
         cerr << "Invalid index given in reflector file for mapping of number: " << first << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
 
     // If second number is not between 0 and 25
     if (second < 0 || second > 25) {
         cerr << "Invalid index given in reflector file for mapping of number: " << second << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
 
     // If file attempts to connect a contact with itself
     if (first == second) {
         cerr << "Invalid index given for mapping of two identical numbers: " << first << endl;
-        exit(INVALID_REFLECTOR_MAPPING);
+        return(INVALID_REFLECTOR_MAPPING);
     }
 
 
@@ -124,18 +126,20 @@ void Reflector::setConnection(int first, int second)
         // Check if first number already has existing connections
         if (connections[i][0] == first || connections[i][1] == first) {
             cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << first << endl;
-            exit(INVALID_REFLECTOR_MAPPING);
+            return(INVALID_REFLECTOR_MAPPING);
         }
         // Check if second number already has existing connections
         if (connections[i][0] == second || connections[i][1] == second) {
             cerr << "Invalid reflector mapping as there are repeats of mapping of number: " << second << endl;
-            exit(INVALID_REFLECTOR_MAPPING);
+            return(INVALID_REFLECTOR_MAPPING);
         }
     }
 
     // If it reaches here, can create new connection
     connections[i][0] = first;
     connections[i][1] = second;
+
+    return NO_ERROR;
 }
 
 // Void function to receive the corresponding connection if the connection exists
@@ -170,22 +174,25 @@ void Reflector::printConnections()
 /* Rotor Class Functions */
 
 // Void function to map current number to its corresponding letter
-void Rotor::setConnection(int number, int index) {
+int Rotor::setConnection(const int number, const int index) {
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
         cerr << "Invalid index given for mapping of input " << index << " to output " << number << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
 
     // Check through all previous mapping if there has been any repeat
     for (int i=0; i<index; i++) {
         if (connections[i] == number) {
             cerr << "Invalid mapping of input " << index << " to output " << number << " (output " << number << " is already mapped to from input " << i << ")" << endl;
-            exit(INVALID_ROTOR_MAPPING);
+            return(INVALID_ROTOR_MAPPING);
         }
     }
 
+    // No error, map number to input
     connections[index] = number;
+
+    return NO_ERROR;
 }
 
 // Void function to receive the corresponding mapping of input in the FORWARD direction
@@ -218,15 +225,18 @@ void Rotor::printConnections()
 }
 
 // Void function to record where are the notches on current rotor
-void Rotor::setNotch(int number)
+int Rotor::setNotch(const int number)
 {
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
         cerr << "Invalid index given for notch: " << number << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
+
     // Notches has 26 elements, change value of element at where a notch is present
     notches[number] = 1;
+
+    return NO_ERROR;
 }
 
 // Boolean function to check if current rotor position has a notch
@@ -246,22 +256,24 @@ void Rotor::printNotches()
 }
 
 // Void function to set the intiial position of the rotor
-void Rotor::setInitialPosition(int number){
+int Rotor::setInitialPosition(const int number){
     // If number is not between 0 and 25
     if (number < 0 || number > 25) {
         cerr << "Invalid index given for initial rotor position: " << number << endl;
-        exit(INVALID_INDEX);
+        return(INVALID_INDEX);
     }
+
+    // No error, set initial position of rotor to number
     pos = number;
+
+    return NO_ERROR;
 }
 
 // Void function to rotate position of the motor
 void Rotor::rotate()
 {
-    // cout << "Rotor has rotated from postion: " << pos << " to position: ";
     pos++;
     if (pos > 25) pos = 0;
-    // cout << pos << endl;
 }
 
 // Void function to output current position of the rotor
@@ -275,17 +287,18 @@ int Rotor::getPosition()
 //////////////////////////////
 
 /* Void function to receive configuration files and output the content into output.txt */
-void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
+int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
     int numberOfRotors = 0;
     int numberOfStartingPositions=0;
+    int result = 0;
     ofstream out;
     out.open("output.txt");
 
     // There needs to be at least 4 parameters (including executable file) when there are no rotors.
     if (argc <= 3) {
         cerr << "Incorrect number of command line arguments\n";
-        exit(INSUFFICIENT_NUMBER_OF_PARAMETERS);
+        return(INSUFFICIENT_NUMBER_OF_PARAMETERS);
     }
 
     for (int i=1; i < argc; ++i) {
@@ -300,7 +313,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
         if (!in)
         {
             cerr << "There is an error opening configuration file: " << *(argv+i) << endl;
-            exit(ERROR_OPENING_CONFIGURATION_FILE);
+            return(ERROR_OPENING_CONFIGURATION_FILE);
         }
 
 
@@ -311,7 +324,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
                     cerr << "Non-numeric character in plugboard file: " << *(argv+i) << endl;
-                    exit(NON_NUMERIC_CHARACTER);
+                    return(NON_NUMERIC_CHARACTER);
                 }
 
                 out << word;
@@ -325,18 +338,20 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
             // Case: Odd number of parameters provided for plugboard
             if (index % 2 != 0) {
                 cerr << "Incorrect (odd) number of parameters in plugboard file: " << *(argv+i) << endl;
-                exit(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
+                return(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
             }
 
             // Case: Too many parameters provided for plugboard
             if (index > 26) {
                 cerr << "Incorrect number of parameters in plugboard file: " << *(argv+i) << endl;
-                exit(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
+                return(INCORRECT_NUMBER_OF_PLUGBOARD_PARAMETERS);
             }
 
             // Create connections using values obtained for plugboard
             for (int i=0; i<index-1; i+=2) {
-                plugboard.setConnection(values[i], values[i+1]);
+                // setConnection will output non-zero if any errors are present
+                result = plugboard.setConnection(values[i], values[i+1]);
+                if (result != 0) return result;
             }
 
             // plugboard.printConnections();
@@ -349,7 +364,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
                     cerr << "Non-numeric character in reflector file: " << *(argv+i) << endl;
-                    exit(NON_NUMERIC_CHARACTER);
+                    return(NON_NUMERIC_CHARACTER);
                 }
 
                 out << word;
@@ -362,24 +377,26 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
             // Case: Odd number of parameters provided for reflector
             if (index % 2 != 0) {
                 cerr << " Incorrect (odd) number of parameters in reflector file: " << *(argv+i) << endl;
-                exit(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
+                return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Case: Even BUT Fewer than 26 parameters provided 
             if (index < 26) {
                 cerr << " Insufficient number of mappings in reflector file: " << *(argv+i) << endl;
-                exit(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
+                return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Check that there are exactly 13 pairs of numbers
             if (index != 26) {
                 cerr << "Incorrect number of parameters in reflector file: " << *(argv+i) << endl;
-                exit(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
+                return(INCORRECT_NUMBER_OF_REFLECTOR_PARAMETERS);
             }
 
             // Create connections using values obtained for reflector
             for (int i=0; i<25; i+=2) {
-                reflector.setConnection(values[i], values[i+1]);
+                // setConnection will output non-zero if any errors are present
+                result = reflector.setConnection(values[i], values[i+1]);
+                if (result != 0) return result;
             }
 
             // reflector.printConnections();
@@ -394,16 +411,20 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
                     cerr << "Non-numeric character for mapping in rotor file: " << *(argv+i) << endl;
-                    exit(NON_NUMERIC_CHARACTER);
+                    return(NON_NUMERIC_CHARACTER);
                 }
                 if (index < 26) {
-                    r1->setConnection(stoi(word), index);
+                    // setConnection will output non-zero if any errors are present
+                    result = r1->setConnection(stoi(word), index);
+                    if (result != 0) return result;
                     out << word;
                     word.clear();
                     index ++;
                 }
                 else {
-                    r1->setNotch(stoi(word));
+                    // setNotch will output non-zero if any errors are present
+                    result = r1->setNotch(stoi(word));
+                    if (result != 0) return result;
                     out << word;
                     word.clear();
                 }
@@ -413,7 +434,7 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
             // Check that every input is provided a mapping
             if (index != 26) {
                 cerr << "Not all inputs mapped in rotor file: " << *(argv+i) << endl;
-                exit(INVALID_ROTOR_MAPPING);
+                return(INVALID_ROTOR_MAPPING);
             }
 
             // r1->printConnections();
@@ -430,16 +451,18 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
                 // check if current word is non-numeric
                 if (!isNumber(word)) {
                     cerr << "Non-numeric character in rotor positions file: " << *(argv+i) << endl;
-                    exit(NON_NUMERIC_CHARACTER);
+                    return(NON_NUMERIC_CHARACTER);
                 }
                 numberOfStartingPositions ++;
-                rotors[numberOfStartingPositions-1].setInitialPosition(stoi(word));
+                // setInitialPosition will output non-zero if any errors are present
+                result = rotors[numberOfStartingPositions-1].setInitialPosition(stoi(word));
+                if (result != 0) return result;
                 out << word;
                 word.clear();
             }
             if (numberOfStartingPositions < numberOfRotors) {
                 cerr << "No starting position for rotor " << numberOfStartingPositions << " in rotor position file: " << *(argv+i) << endl;;
-                exit(NO_ROTOR_STARTING_POSITION);
+                return(NO_ROTOR_STARTING_POSITION);
             }
             out << endl;
 
@@ -449,13 +472,14 @@ void receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Refl
 
         // Unknown file type
         else {
-            cout << "Unknown file type: " << *(argv+i) << endl;
             cerr << "Unacceptable or unknown file type for configuration file: " << *(argv+i) << endl;
-            exit(ERROR_OPENING_CONFIGURATION_FILE);
+            return(ERROR_OPENING_CONFIGURATION_FILE);
         }
         in.close();
     }
     out.close();
+
+    return NO_ERROR;
 }
 
 /* Helper Boolean function to check if input read in from file is a number */
@@ -475,7 +499,7 @@ Each character goes through the following components where they are changed acco
     4. Through every rotor from Left -> Right
     5. Plugboard
 */
-void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
+int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors)
 {
     // Remove whitespaces from message
     message.erase(remove_if(message.begin(), message.end(), ::isspace), message.end());
@@ -488,7 +512,7 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
         // Only take in CAPITAL letters
         if (c < 'A' || c > 'Z') {
             cerr << endl << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
-            exit(INVALID_INPUT_CHARACTER);
+            return(INVALID_INPUT_CHARACTER);
         }
 
         int number = (int) c - 65;
@@ -520,6 +544,8 @@ void encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflec
     }
 
     cout << endl;
+
+    return NO_ERROR;
 }
 
 /* Void function to rotate all rotors */
