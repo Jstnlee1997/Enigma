@@ -1,7 +1,2 @@
-# Ignore .o and Makefile
-enigma.o
-main.o
-Makefile
-
 # Ignore output.txt file
 output.txt
