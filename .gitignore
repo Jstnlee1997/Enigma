@@ -1,2 +1,7 @@
 # Ignore output.txt file
 output.txt
+
+# Ignore .o files and executable files
+enigma
+enigma.o
+main.o
