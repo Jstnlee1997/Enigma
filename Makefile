@@ -1,10 +1,13 @@
-enigma: main.o enigma.o
-	g++ -g main.o enigma.o -o enigma
+enigma: main.o enigma.o helper.o
+	g++ -g main.o enigma.o helper.o -o enigma
 
-main.o: main.cpp enigma.h
+main.o: main.cpp enigma.h helper.h
 	g++ -Wall -g -c main.cpp
 
-enigma.o: enigma.cpp enigma.h
+helper.o: helper.cpp helper.h
+	g++ -Wall -g -c helper.cpp
+
+enigma.o: enigma.cpp enigma.h helper.h
 	g++ -Wall -g -c enigma.cpp
 
 clean:

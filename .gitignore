@@ -5,3 +5,4 @@ output.txt
 enigma
 enigma.o
 main.o
+helper.o

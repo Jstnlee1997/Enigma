@@ -1,10 +1,9 @@
 #include <iostream>
-#include <fstream>
-#include <cstdio>
 #include <strings.h>
 #include <vector>
 #include "errors.h"
 #include "enigma.h"
+#include "helper.h"
 
 using namespace std;
 
