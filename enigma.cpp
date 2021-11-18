@@ -4,9 +4,9 @@
 #include <strings.h>
 #include <regex>
 #include "enigma.h"
-#include "plugboard.h"
-#include "reflector.h"
-#include "rotor.h"
+#include "src/plugboard.h"
+#include "src/reflector.h"
+#include "src/rotor.h"
 #include "errors.h"
 
 using namespace std;

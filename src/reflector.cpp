@@ -1,6 +1,6 @@
 #include <iostream>
 #include "reflector.h"
-#include "errors.h"
+#include "../errors.h"
 
 using namespace std;
 
