@@ -246,7 +246,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
             return(INVALID_INPUT_CHARACTER);
         }
 
-        int number = (int) c - 65;
+        int number = (int) (c - 'A');
 
         // Pass number through the plugbloard
         plugboard.getConnection(number);
@@ -269,7 +269,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
 
         // cout << "Initial letter: " << c << " has been encrypted/decrypted to letter: ";
 
-        c = (char) (number + 65);
+        c = (char) (number + 'A');
 
         cout << c;
     }
