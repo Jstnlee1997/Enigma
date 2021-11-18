@@ -1,4 +1,4 @@
-objects = main.o enigma.o src/plugboard.o src/reflector.o src/rotor.o
+objects = main.o enigma.o plugboard.o reflector.o rotor.o
 headers = enigma.h src/plugboard.h src/reflector.h src/rotor.h
 
 enigma: $(objects)
@@ -8,12 +8,15 @@ main.o: $(headers)
 
 enigma.o: $(headers)
 
-src/plugboard.o: src/plugboard.h
+plugboard.o: src/plugboard.h
+	g++ -Wall -g -c src/plugboard.cpp
 
-src/reflector.o: src/reflector.h
+reflector.o: src/reflector.h
+	g++ -Wall -g -c src/reflector.cpp
 
-src/rotor.o: src/rotor.h
+rotor.o: src/rotor.h
+	g++ -Wall -g -c src/rotor.cpp
 
 .PHONY: clean
 clean:
-	rm -f *.o enigma
+	rm -f $(objects) enigma
