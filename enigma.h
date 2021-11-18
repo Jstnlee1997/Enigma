@@ -3,7 +3,9 @@
 #ifndef ENIGMA_H
 #define ENIGMA_H
 
-#include "helper.h"
+#include "plugboard.h"
+#include "reflector.h"
+#include "rotor.h"
 
 ///////////////////////////////
 ///* FUNCTION DECLARATIONS *///

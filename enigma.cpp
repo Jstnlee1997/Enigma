@@ -3,8 +3,10 @@
 #include <vector>
 #include <strings.h>
 #include <regex>
-#include "helper.h"
 #include "enigma.h"
+#include "plugboard.h"
+#include "reflector.h"
+#include "rotor.h"
 #include "errors.h"
 
 using namespace std;

@@ -3,7 +3,9 @@
 #include <vector>
 #include "errors.h"
 #include "enigma.h"
-#include "helper.h"
+#include "plugboard.h"
+#include "reflector.h"
+#include "rotor.h"
 
 using namespace std;
 
