@@ -3,15 +3,15 @@
 #ifndef ENIGMA_H
 #define ENIGMA_H
 
-#include "src/plugboard.h"
-#include "src/reflector.h"
-#include "src/rotor.h"
+#include "plugboard.h"
+#include "reflector.h"
+#include "rotor.h"
 
 ///////////////////////////////
 ///* FUNCTION DECLARATIONS *///
 ///////////////////////////////
 
-int receiveConfigurationFiles(int argc, char** argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
+int receiveConfigurationFiles(int argc, char **argv, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 bool isNumber(const std::string &word);
 int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflector, std::vector<Rotor> &rotors);
 void rotateAllRotors(const int numberOfRotors, std::vector<Rotor> &rotors);
