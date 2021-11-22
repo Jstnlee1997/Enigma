@@ -4,9 +4,9 @@
 #include <strings.h>
 #include <regex>
 #include "enigma.h"
-#include "plugboard.h"
-#include "reflector.h"
-#include "rotor.h"
+#include "src/plugboard.h"
+#include "src/reflector.h"
+#include "src/rotor.h"
 #include "errors.h"
 
 using namespace std;
@@ -244,7 +244,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
     for (char &c : message) {
         // Only take in CAPITAL letters
         if (c < 'A' || c > 'Z') {
-            cerr << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
+            cerr << endl; cerr << c << " is not a valid input character (input characters must be upper case letters A-Z)!" << endl;
             return(INVALID_INPUT_CHARACTER);
         }
 
@@ -276,7 +276,7 @@ int encryptMessage(std::string message, Plugboard &plugboard, Reflector &reflect
         cout << c;
     }
 
-    // cout << endl;
+    cout << endl;
 
     return NO_ERROR;
 }

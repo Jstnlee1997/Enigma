@@ -1,6 +1,6 @@
 #include <iostream>
 #include "rotor.h"
-#include "errors.h"
+#include "../errors.h"
 
 using namespace std;
 

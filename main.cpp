@@ -3,9 +3,9 @@
 #include <vector>
 #include "errors.h"
 #include "enigma.h"
-#include "plugboard.h"
-#include "reflector.h"
-#include "rotor.h"
+#include "src/plugboard.h"
+#include "src/reflector.h"
+#include "src/rotor.h"
 
 using namespace std;
 
@@ -24,8 +24,8 @@ int main(int argc, char** argv)
     if (result != 0) return result;
 
     // Prompt user to send a message to be encrypted/decrypted
-    // cout << "What message would you like to encrypt/decrypt?\n"
-    //     << "Please make sure your message is in CAPITAL letters only.\n";
+    cout << "What message would you like to encrypt/decrypt?\n"
+        << "Please make sure your message is in CAPITAL letters only.\n";
     getline(cin, message);
 
     /* Encrypt/Decrypt message if possible 
